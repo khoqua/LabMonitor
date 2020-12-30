@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, Text, View, FlatList, Dimensions, StatusBar, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import { Container } from '../components/Container';
 import PropTypes from 'prop-types';
 
 //import styles from './styles';
@@ -62,19 +61,17 @@ export default class Labs extends React.Component {
       return <View style={[styles.item, styles.itemInvisible]} />;
     }
     return (
-    <Container>
       <View
         style={styles.item}>
         <Text style={styles.itemText}>{item.key}</Text>
       </View>
-        <StatusBar translucent={false} barStyle="light-content" />
-        <Text style={styles.title}>
-        TMA Labs: {this.value}
-        </Text>
-        <View style={styles.buttonContainer}>
-            <LogoutButton onPress={this.handleLogoutButtonPress}/>
-        </View>
-    </Container> 
+      //  <StatusBar translucent={false} barStyle="light-content" />
+      //  <Text style={styles.title}>
+      //  TMA Labs: {this.value}
+      //  </Text>
+      //  <View style={styles.buttonContainer}>
+       //     <LogoutButton onPress={this.handleLogoutButtonPress}/>
+       // </View>
     );
   };
 
