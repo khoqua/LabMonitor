@@ -85,10 +85,12 @@ class Login extends React.Component {
                 if(!token) {
                     this.props.navigation.navigate('Login');
                 } else {
-                    this.props.navigation.navigate('Labs',{'token': '5'});
+                    this.props.navigation.navigate('Labs');
                 }
             } else {
                 alert('Invalid email or password') 
+                // Just for issue cannot connect to authen server
+                this.props.navigation.navigate('Labs');
             }
         } catch(error){
             console.log("catch error: " + error);

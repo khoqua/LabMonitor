@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { View, Text } from 'react-native';
+
 class SplashScreen extends React.Component {
   performTimeConsumingTask = async() => {
     return new Promise((resolve) =>
@@ -25,6 +26,7 @@ class SplashScreen extends React.Component {
     );
   }
 }
+
 const styles = {
   viewStyles: {
     flex: 1,
@@ -40,32 +42,3 @@ const styles = {
   }
 }
 export default SplashScreen;
-
-const InitialNavigator = createSwitchNavigator({
-  Splash: SplashScreen,
-  App: StackNavigator
-});
-export default createAppContainer(InitialNavigator);
-
-
-const StackNavigator = createStackNavigator({
-    Login: {
-      screen: Login,
-      navigationOptions: {
-      headerStyle: styles.header,
-      }
-    },
-    Labs: {
-      screen: Labs,
-      navigationOptions: {
-      headerStyle: styles.header,
-      }
-    },
-  },
-  {
-    headerMode: 'screen',
-}
-);
-
-//const AppNavigator = createAppContainer(SwitchNavigator);
-export default createAppContainer(StackNavigator);
