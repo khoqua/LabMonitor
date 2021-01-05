@@ -1,5 +1,5 @@
 
-import React, {Component} from 'react';
+/*import React, {Component} from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation'
 
 import SplashScreen from './screens/Login';
@@ -12,3 +12,4 @@ const InitialNavigator = createSwitchNavigator({
 });
 
 export default createAppContainer(InitialNavigator);
+*/

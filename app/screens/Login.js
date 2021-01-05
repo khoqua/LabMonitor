@@ -73,14 +73,14 @@ class Login extends React.Component {
                     password: this.state.password
                 })
             });
-            alert(this.state.email + this.state.password)
+            //alert(this.state.email + this.state.password)
 
             let res = await response.json();
             if (response.status >= 200 && response.status < 300) {
                 this.setState({error: ""});
                 let token = res.token;
                 this.storeToken(token);  
-                alert(this.storeToken(token))                     
+                //alert(this.storeToken(token))                     
                 console.log("Response success is: " + token); 
                 if(!token) {
                     this.props.navigation.navigate('Login');
@@ -90,7 +90,7 @@ class Login extends React.Component {
             } else {
                 alert('Invalid email or password') 
                 // Just for issue cannot connect to authen server
-                this.props.navigation.navigate('Labs');
+               // this.props.navigation.navigate('Labs');
             }
         } catch(error){
             console.log("catch error: " + error);
