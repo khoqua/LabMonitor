@@ -5,6 +5,7 @@ import { Text, View, StatusBar, FlatList, Dimensions, Image } from 'react-native
 import LabsInfo from '../components/LabsInfo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+
 const ACCESS_TOKEN = 'access_token';
 
 
@@ -61,7 +62,8 @@ class Labs extends Component {
     super(props);
     this.state = {
       labs: [],
-      load: true
+      load: true,
+      labsinfo: ""
     }
     }
 
@@ -70,55 +72,61 @@ class Labs extends Component {
     }
 
     _loadInitialState = async () => {
+
+        
         let token = await AsyncStorage.getItem(ACCESS_TOKEN);
-        if (token !== null) {
-            this.props.navigation.navigate('Labs'); 
-        }
-    }
-    
-
-    async storeToken(token) {
-        try {
-            await AsyncStorage.setItem(ACCESS_TOKEN, token);
-            this.getToken();
-        } catch(error) {
-            console.log("Something went wrong")
-        }
-    }
-
-    async getToken() {
-        try {
-            let token = await AsyncStorage.getItem(ACCESS_TOKEN);            
-            console.log("token is:" + token);
-        } catch(error) {
-            console.log("Something went wrong")
-        }
-    }
-
-    async onLoginButtonPress() {
+       // alert('Token in lab' + token)
+        //if (token !== null) {
+       // alert('Token OK')
+       // }
         try {
             let response = await fetch('http://103.199.7.185/api/device', {
                 method: 'GET',
                     headers: {
-                      Authorization: `Bearer ${AsyncStorage.getItem(ACCESS_TOKEN)}`,
+                      Authorization: `Bearer ${token}`,
                     },
             });
             let res = await response.json();
             if (response.status >= 200 && response.status < 300) {
-                this.setState({error: ""});
-                let token = res.token;
-                this.storeToken(token);  
-                //alert(this.storeToken(token))                     
-                console.log("Response success is: " + token); 
-                if(!token) {
-                    this.props.navigation.navigate('Login');
-                } else {
-                    this.props.navigation.navigate('Labs');
+                alert('Your session is not expired')
+                let labs = res[0].device_id; 
+                console.log("device_id: "  + labs)
+
+              //============================================================
+                try {
+                    let response = await fetch('http://103.199.7.185/api/get_device_info/' + labs, {
+                        method: 'GET',
+                            headers: {
+                            Authorization: `Bearer ${token}`,
+                            },
+                    });
+                    let res1 = await response.json();
+                    if (response.status >= 200 && response.status < 300) {
+                        let labsinfo = res1.device_name; 
+                        console.log("device_id: "  + labsinfo)
+                    } else {
+                        alert('Something wrong')
+                    }
+                } catch(error){
+                    console.log("catch error: " + error);
+                    let formError = JSON.parse(error);
+                    let errorArray = [];
+                    for(let key in formError) {
+                        if(formError[key].length > 1){
+                            formError[key].map(error => errorArray.push(`${key} ${error}`))
+                        } else {
+                            errorArray.push(`${key} ${formError[key]}`)
+                        }
+                    }
+                    this.setState({error: errorArray});
                 }
-            } else {
-                alert('Invalid email or password') 
-                // Just for issue cannot connect to authen server
-               // this.props.navigation.navigate('Labs');
+
+              //============================================================
+            } 
+            else {
+                alert('Your session has expired. Please log in again.')
+                AsyncStorage.removeItem(ACCESS_TOKEN);
+                this.props.navigation.navigate('Login');
             }
         } catch(error){
             console.log("catch error: " + error);
@@ -133,8 +141,8 @@ class Labs extends Component {
             }
             this.setState({error: errorArray});
         }
-    }
 
+    }
     sendToLabsListScreen(index) {
         let labs = Labslist[index]
         this.props.navigation.navigate('LabsList', { title: labs.title });
